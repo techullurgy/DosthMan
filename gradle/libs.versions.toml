@@ -28,6 +28,7 @@ kotlin = "2.4.0"
 kotlinx-serialization = "1.11.0"
 kotlinx-coroutines = "1.11.0"
 kotlinx-datetime = "0.8.0"
+kotlinx-io = "0.9.1"
 turbine = "1.2.1"
 coil = "3.5.0"
 ktor = "3.5.1"
@@ -38,16 +39,17 @@ ksp = "2.3.9"
 gms = "4.5.0"
 room2 = "2.8.4"
 room3 = "3.0.0"
+paging3 = "3.5.0"
 sqlite = "2.7.0"
 media3 = "1.10.1"
 datastore = "1.2.1"
 adaptive = "1.9.0"
 firebase-bom = "34.16.0"
 robolectric = "4.16.1"
-roborazzi = "1.69.0"
-kotest = "6.2.2"
+roborazzi = "1.70.0"
+kotest = "6.2.3"
 assertk = "0.28.1"
-mockk = "1.14.9"
+mockk = "1.14.11"
 kermit = "2.1.0"
 kover = "0.9.9"
 ktlint-gradle = "14.2.0"
@@ -60,7 +62,7 @@ uiautomator = "2.4.0"
 benchmarkMacroJunit4 = "1.4.1"
 baselineprofile = "1.5.0-alpha07"
 profileinstaller = "1.4.1"
-composeHotReload = "1.1.1"
+composeHotReload = "1.2.0"
 secretsGradlePlugin = "2.0.1"
 playServicesMaps = "20.0.0"
 playServicesLocation = "21.4.0"
@@ -68,13 +70,13 @@ mapsCompose = "8.4.0"
 places = "5.3.0"
 mapsAndroidUtils = "5.0.0"
 mapsUtilsKtx = "6.2.0"
-composeStabilityAnalyzer = "0.10.0"
+composeStabilityAnalyzer = "0.11.1"
 composeBom = "2026.06.01"
 material = "1.14.0"
 kotlinGraphicsMath = "1.8.0"
 jetbrainsNav3Ui = "1.1.1"
 jetbrainsNav3Adaptive = "1.3.0-beta02"
-kotlin-wrappers = "2026.7.2"
+kotlin-wrappers = "2026.7.5"
 
 [libraries]
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidXJunit" }
@@ -112,10 +114,15 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 
 # TEST-UTILS
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
+# Paging 3 (KMP / CMP)
+androidx-paging3-common = { module = "androidx.paging:paging-common", version.ref = "paging3" }
+androidx-paging3-compose = { module = "androidx.paging:paging-compose", version.ref = "paging3" }
+androidx-paging3-testing = { module = "androidx.paging:paging-testing", version.ref = "paging3" }
 
 # Navigation 3
 androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
@@ -174,6 +181,7 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
 androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
 androidx-room3-testing = { module = "androidx.room3:room3-testing", version.ref = "room3" }
+androidx-room3-paging = { module = "androidx.room3:room3-paging", version.ref = "room3" }
 
 # Google Maps
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
@@ -215,12 +223,14 @@ compose-compiler-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compile
 compose-multiplatform-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "composeMultiplatform" }
 kotlin-multiplatform-gradlePlugin = { module = "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin", version.ref = "kotlin" }
 compose-stability-analyzer-gradlePlugin = { module = "com.github.skydoves.compose.stability.analyzer:com.github.skydoves.compose.stability.analyzer.gradle.plugin", version.ref = "composeStabilityAnalyzer" }
-
+koin-gradlePlugin = { module = "io.insert-koin:koin-gradle-plugin", version.ref = "koin" }
+koin-compiler-gradlePlugin = { module = "io.insert-koin:koin-compiler-gradle-plugin", version.ref = "koin-compiler" }
 android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 androidx-room-gradle-plugin = { module = "androidx.room:room-gradle-plugin", version.ref = "room2" }
+androidx-room3-gradle-plugin = { module = "androidx.room3:androidx.room3.gradle.plugin", version.ref = "room3" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
 buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "buildkonfig" }

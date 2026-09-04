@@ -1,44 +1,93 @@
-# Dosthman
+# ApiClientK
 
-## 1. Description
-**Dosthman** is a cross-platform HTTP API client and request inspector (Postman clone) built with Kotlin Multiplatform (KMP) and Compose Multiplatform. Operating across Android, iOS, Desktop (JVM), and Web (Kotlin/Wasm/JS), Dosthman enables developers to construct HTTP requests, inspect responses, manage headers and query parameters, and format complex JSON payloads within an intuitive multi-tab interface.
+**ApiClientK** is a modern, cross-platform REST API client built with **Kotlin Multiplatform** and **Compose Multiplatform**, providing a fast and intuitive way to test, debug, and interact with HTTP APIs across **Android**, **iOS**, and **Desktop**. Inspired by tools like Postman, the application focuses on delivering a native, lightweight experience while sharing a single codebase across multiple platforms.
 
----
-
-## 2. Technical Special Aspects
-- **Custom Multiplatform JSON Viewer Engine**: Built from the ground up (`json_viewer` module) to parse raw JSON into dynamic visual node trees (`JsonNode`, `JsonState`) with collapsing/expanding tree depth, custom gutter line numbering, hit-test bound detection (`HitTestBounds`), and customizable styling configurations (`JsonViewerStyle`, `JsonViewerColors`).
-- **Use-Case Driven Architecture**: Decouples business operations into dedicated domain use cases (`HttpRequestExecutorUsecase`, `SaveRequestUsecase`, `CreateNewRequestUsecase`, `HttpRequestHeadersChangeUsecase`, `HttpRequestParamsChangeUsecase`).
-- **Cross-Platform Dependency Injection**: Utilizes Koin with target-specific platform data modules (`PlatformDataModule.android.kt`, `PlatformDataModule.ios.kt`, `PlatformDataModule.js.kt`).
-- **Dynamic Tab & Collection Management**: Supports concurrent HTTP request tab workflows with real-time reactive state updates.
+The project showcases modern Kotlin development practices, combining declarative UI, scalable architecture, and cross-platform networking into a production-ready application.
 
 ---
 
-## 3. Technologies Used
-- **Languages**: Kotlin (100% shared business logic & UI)
-- **UI Framework**: Compose Multiplatform (Android, iOS, Desktop, Web)
-- **HTTP Engine**: Ktor HTTP Client (`ktor-client-core`, target-specific engines)
-- **Dependency Injection**: Koin Multiplatform
-- **State & Concurrency**: Kotlin Coroutines, StateFlow, ViewModel
-- **Build System**: Gradle KTS, Version Catalogs
+## Highlights
+
+- **Cross-Platform Application**
+  - Single codebase targeting Android, iOS, and Desktop.
+  - Shared business logic and user interface across all platforms.
+
+- **REST API Testing**
+  - Send HTTP requests using common methods such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
+  - Configure request URLs, headers, query parameters, and request bodies.
+  - View response status, headers, and payload.
+
+- **Custom JSON Viewer**
+  - Beautifully formatted and syntax-highlighted JSON responses.
+  - Expandable and collapsible JSON tree.
+  - Improved readability for large and deeply nested payloads.
+
+- **Responsive User Experience**
+  - Adaptive layouts optimized for phones, tablets, and desktop screens.
+  - Smooth animations and transitions for an intuitive workflow.
 
 ---
 
-## 4. Testing Technologies
-- **Unit Testing Framework**: `kotlin.test`
-- **Asynchronous Flow Testing**: Turbine (Flow assertions)
-- **Target Test Suites**:
-  - `commonTest`: JSON node conversion logic and HTTP request builder state tests
-  - `jvmTest` & `iosTest`: Platform execution verification
+## Architecture
+
+The application follows a modular, clean architecture that separates presentation, networking, and shared business logic, enabling maintainability and scalability.
+
+### Core Technologies
+
+- **Kotlin Multiplatform (KMP)**
+  - Shared business logic across Android, iOS, and Desktop.
+  - Platform-specific implementations only where necessary.
+
+- **Compose Multiplatform (CMP)**
+  - Declarative UI shared across all supported platforms.
+  - Responsive layouts with a consistent user experience.
+
+- **Ktor Client**
+  - Cross-platform HTTP client for executing REST API requests.
+  - Supports configurable requests, headers, authentication, and response handling.
+
+- **Koin**
+  - Dependency Injection for shared and platform modules.
+  - Simplifies dependency management and improves testability.
+
+- **Jetpack Navigation 3**
+  - Type-safe navigation.
+  - Predictable navigation state.
+  - Modular navigation architecture.
 
 ---
 
-## 5. Cloud Technologies
-- N/A (Standalone desktop, mobile, and web developer productivity application).
+## Technical Focus
+
+ApiClientK demonstrates how to build a sophisticated developer tool using modern Kotlin technologies while maintaining a shared codebase across multiple platforms.
+
+Key areas include:
+
+- Cross-platform networking with Ktor Client.
+- Declarative UI using Compose Multiplatform.
+- Responsive layouts for mobile and desktop.
+- Custom JSON parsing and visualization.
+- State-driven UI with reactive updates.
+- Dependency Injection using Koin.
+- Navigation using the latest Navigation 3 APIs.
+- Modular architecture for scalability and maintainability.
 
 ---
 
-## 6. ROADMAP
-- [ ] Implement Environment Variables & dynamic template substitution (e.g., `{{baseUrl}}/api/v1`).
-- [ ] Add support for WebSocket, gRPC, and GraphQL request inspection.
-- [ ] Build Postman Collection (v2.1) and OpenAPI/Swagger import/export capabilities.
-- [ ] Add pre-request scripting and automated response assertion execution engines.
+## Skills Demonstrated
+
+- Kotlin Multiplatform Development
+- Compose Multiplatform UI
+- Android Development
+- iOS Development
+- Desktop Application Development
+- REST API Client Development
+- HTTP Networking with Ktor Client
+- JSON Parsing & Visualization
+- Responsive UI Design
+- Animated User Interfaces
+- Dependency Injection with Koin
+- Navigation Architecture
+- State Management
+- Clean Architecture
+- Modular Project Structure
