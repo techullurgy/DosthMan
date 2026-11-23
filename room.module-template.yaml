@@ -1,0 +1,30 @@
+
+settings: 
+  kotlin: 
+    ksp:
+      processors: 
+        - $libs.androidx.room3.compiler
+
+settings@jvm:
+  kotlin:
+    ksp:
+      processorOptions: 
+        room.schemaLocation: ./schemas@jvm
+
+settings@android:
+  kotlin:
+    ksp:
+      processorOptions:
+        room.schemaLocation: ./schemas@android
+
+settings@iosArm64:
+  kotlin:
+    ksp:
+      processorOptions:
+        room.schemaLocation: ./schemas@iosArm64
+
+settings@iosSimulatorArm64:
+  kotlin:
+    ksp:
+      processorOptions:
+        room.schemaLocation: ./schemas@iosSimulatorArm64

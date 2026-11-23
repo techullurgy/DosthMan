@@ -1,0 +1,6 @@
+settings:
+  kotlin:
+    version: 2.5.0-RC
+  jvm:
+    jdk:
+      selectionMode: javaHome

@@ -1,0 +1,16 @@
+product: android/app
+
+apply:
+  - //base.module-template.yaml
+
+dependencies:
+  - //shared
+  - $libs.androidx.activity.compose
+  - $compose.preview
+  - $compose.uiTooling
+
+settings:
+  compose: enabled
+  android:
+    applicationId: com.techullurgy.dosthman
+    namespace: com.techullurgy.dosthman

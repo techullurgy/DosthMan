@@ -1,0 +1,29 @@
+product:
+  type: kmp/lib
+  platforms: [android, jvm, iosArm64, iosSimulatorArm64]
+
+settings:
+  ktor:
+    enabled: true
+    version: 3.6.1
+  kotlin:
+    serialization: enabled
+  compose: enabled
+
+#    compilerPlugins:
+#      - id: io.insert-koin.compiler.plugin
+#        dependency: $libs.koin.compiler.plugin
+
+apply:
+  - //base.module-template.yaml
+  - //room.module-template.yaml
+
+dependencies:
+  - $kotlin.serialization.json
+  - $ktor.client.core
+  - $ktor.client.cio
+  - $libs.koin.core
+  - $libs.koin.annotations
+  - $libs.androidx.room3.runtime
+  - $libs.androidx.sqlite.bundled
+  - $libs.androidx.appstate.transform

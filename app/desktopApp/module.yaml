@@ -1,0 +1,16 @@
+product: jvm/app
+
+apply:
+  - //base.module-template.yaml
+
+dependencies:
+  - //shared
+  - $compose.desktop.currentOs
+  - $compose.preview
+  - $libs.kotlinx.coroutines.swing
+  - $libs.logback.classic
+
+settings:
+  compose: enabled
+  jvm:
+    mainClass: com.techullurgy.dosthman.MainKt
