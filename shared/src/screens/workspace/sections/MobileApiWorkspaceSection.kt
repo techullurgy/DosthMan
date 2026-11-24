@@ -3,11 +3,16 @@ package com.techullurgy.dosthman.shared.screens.workspace.sections
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
@@ -16,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.SaveableStateHolder
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -27,22 +33,28 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import com.techullurgy.dosthman.shared.components.EditableText
 import com.techullurgy.dosthman.shared.screens.workspace.components.EmptyWorkspaceContent
-import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestTabViewModel
-import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpResponseSectionViewModel
+import com.techullurgy.dosthman.shared.screens.workspace.components.SlidingContainer
+import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceSidebar
+import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceUrlBar
 import com.techullurgy.dosthman.shared.screens.workspace.core.LocalRequestsTabsSynchronizer
 import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestSectionViewModel
-import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceTabBar
-import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceUrlBar
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestTabViewModel
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpResponseSectionViewModel
 import com.techullurgy.dosthman.shared.uimodels.UiHttpResponse
 import kotlin.time.Clock
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+
+private enum class MobileWorkspaceArea {
+    SideBar, Main
+}
 
 private enum class MobileWorkspaceTab(val label: String) {
     Request("Request"),
     Response("Response"),
 }
 
+@OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun MobileApiWorkspaceSection(
     requestTabsViewModelStoreProvider: ViewModelStoreProvider,
@@ -50,6 +62,8 @@ internal fun MobileApiWorkspaceSection(
     modifier: Modifier = Modifier,
 ) {
     val requestsTabsSynchronizer = LocalRequestsTabsSynchronizer.current
+
+    var isSidebarOpen by rememberSaveable { mutableStateOf(false) }
 
     fun closeTab(key: String) {
         requestsTabsSynchronizer.removeTab(key)
@@ -60,57 +74,96 @@ internal fun MobileApiWorkspaceSection(
 
     val selectedKey = requestsTabsSynchronizer.selectedTab
 
-    Column(modifier = modifier.fillMaxSize()) {
-        WorkspaceTabBar(
-            openedTabs = requestsTabsSynchronizer.openedTabs,
-            selectedTab = selectedKey,
-            onSelectTab = { requestsTabsSynchronizer.openTab(it) },
-            onCloseTab = ::closeTab,
-            onAddTab = {
-                val newKey = "${Clock.System.now().toEpochMilliseconds()}"
-                requestsTabsSynchronizer.openTab(newKey)
-            },
-        )
+    Grid(
+        config = {
+            row(1f)
+            column(1f)
 
-        HorizontalDivider()
-
-        if (selectedKey != null) {
-            val viewModelStoreOwner = rememberViewModelStoreOwner(
-                provider = requestTabsViewModelStoreProvider,
-                key = selectedKey,
+            area(
+                MobileWorkspaceArea.SideBar,
+                row = 1,
+                column = 1,
             )
 
-            requestTabsSaveableStateHolder.SaveableStateProvider(selectedKey) {
-                CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                    val requestViewModel = koinViewModel<HttpRequestSectionViewModel> {
-                        parametersOf(selectedKey)
-                    }
-                    val responseViewModel = koinViewModel<HttpResponseSectionViewModel> {
-                        parametersOf(selectedKey)
-                    }
-                    val tabViewModel = koinViewModel<HttpRequestTabViewModel> {
-                        parametersOf(selectedKey)
-                    }
+            area(
+                MobileWorkspaceArea.Main,
+                row = 1,
+                column = 1,
+            )
+        },
+        modifier = modifier.fillMaxSize(),
+    ) {
+        // Back Layer: WorkspaceSidebar constrained to 75% width
+        Box(
+            modifier = Modifier
+                .gridItem(MobileWorkspaceArea.SideBar)
+                .fillMaxHeight()
+                .fillMaxWidth(0.75f)
+        ) {
+            WorkspaceSidebar(
+                modifier = Modifier.fillMaxSize(),
+                onCloseTab = ::closeTab,
+                onSelectTabOverride = { key ->
+                    requestsTabsSynchronizer.openTab(key)
+                    isSidebarOpen = false
+                },
+            )
+        }
 
-                    MobileTabWorkspace(
-                        requestViewModel = requestViewModel,
-                        responseViewModel = responseViewModel,
-                        tabViewModel = tabViewModel,
-                        modifier = Modifier.weight(1f).fillMaxWidth(),
+        // Front Layer: Main workspace section wrapped inside SlidingContainer (takes full size)
+        Box(
+            modifier = Modifier
+                .gridItem(MobileWorkspaceArea.Main)
+                .fillMaxSize()
+        ) {
+            SlidingContainer(
+                isOpen = isSidebarOpen,
+                onIsOpenChange = { isSidebarOpen = it },
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (selectedKey != null) {
+                    val viewModelStoreOwner = rememberViewModelStoreOwner(
+                        provider = requestTabsViewModelStoreProvider,
+                        key = selectedKey,
+                    )
+
+                    requestTabsSaveableStateHolder.SaveableStateProvider(selectedKey) {
+                        CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
+                            val requestViewModel = koinViewModel<HttpRequestSectionViewModel> {
+                                parametersOf(selectedKey)
+                            }
+                            val responseViewModel = koinViewModel<HttpResponseSectionViewModel> {
+                                parametersOf(selectedKey)
+                            }
+                            val tabViewModel = koinViewModel<HttpRequestTabViewModel> {
+                                parametersOf(selectedKey)
+                            }
+
+                            MobileTabWorkspace(
+                                requestViewModel = requestViewModel,
+                                responseViewModel = responseViewModel,
+                                tabViewModel = tabViewModel,
+                                onToggleSidebar = { isSidebarOpen = !isSidebarOpen },
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        }
+                    }
+                } else {
+                    EmptyWorkspaceContent(
+                        onNewRequest = {
+                            val newKey = "${Clock.System.now().toEpochMilliseconds()}"
+                            requestsTabsSynchronizer.openTab(newKey)
+                            isSidebarOpen = false
+                        },
+                        onOpenRequest = { requestKey ->
+                            requestsTabsSynchronizer.openTab(requestKey)
+                            isSidebarOpen = false
+                        },
+                        onToggleSidebar = { isSidebarOpen = !isSidebarOpen },
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
-        } else {
-            EmptyWorkspaceContent(
-                onNewRequest = {
-                    val newKey = "${Clock.System.now().toEpochMilliseconds()}"
-                    requestsTabsSynchronizer.openTab(newKey)
-                },
-                onOpenRequest = { requestKey ->
-                    requestsTabsSynchronizer.openTab(requestKey)
-                },
-                modifier = Modifier.weight(1f).fillMaxWidth(),
-            )
         }
     }
 }
@@ -120,6 +173,7 @@ private fun MobileTabWorkspace(
     requestViewModel: HttpRequestSectionViewModel,
     responseViewModel: HttpResponseSectionViewModel,
     tabViewModel: HttpRequestTabViewModel,
+    onToggleSidebar: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val editableRequest = requestViewModel.editableHttpRequest
@@ -131,10 +185,20 @@ private fun MobileTabWorkspace(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                IconButton(
+                    onClick = onToggleSidebar,
+                    modifier = Modifier.size(36.dp),
+                ) {
+                    Text(
+                        text = "☰",
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+
                 EditableText(
                     text = requestName,
                     onTextChange = { tabViewModel.saveName(it) },

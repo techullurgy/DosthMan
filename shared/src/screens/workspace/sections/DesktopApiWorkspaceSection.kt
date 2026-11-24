@@ -1,13 +1,6 @@
 package com.techullurgy.dosthman.shared.screens.workspace.sections
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
@@ -22,21 +15,72 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.rememberViewModelStoreOwner
 import com.techullurgy.dosthman.shared.components.EditableText
 import com.techullurgy.dosthman.shared.screens.workspace.components.EmptyWorkspaceContent
-import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestTabViewModel
-import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpResponseSectionViewModel
-import com.techullurgy.dosthman.shared.screens.workspace.core.LocalRequestsTabsSynchronizer
-import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestSectionViewModel
+import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceSidebar
 import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceTabBar
 import com.techullurgy.dosthman.shared.screens.workspace.components.WorkspaceUrlBar
+import com.techullurgy.dosthman.shared.screens.workspace.core.LocalRequestsTabsSynchronizer
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestSectionViewModel
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestTabViewModel
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpResponseSectionViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Clock
 
+private enum class WorkspaceArea {
+    SideBar, Main
+}
+
+@OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun DesktopApiWorkspaceSection(
     requestTabsViewModelStoreProvider: ViewModelStoreProvider,
     requestTabsSaveableStateHolder: SaveableStateHolder,
     modifier: Modifier = Modifier,
+) {
+    Grid(
+        config = {
+            val sidebarWidthPercentage = minOf(
+                constraints.maxWidth * 0.25f,
+                300.dp.toPx()
+            ) / constraints.maxWidth
+
+            row(1f)
+            column(sidebarWidthPercentage)
+            column(1f - sidebarWidthPercentage)
+
+            area(
+                WorkspaceArea.SideBar,
+                row = 1,
+                column = 1
+            )
+
+            area(
+                WorkspaceArea.Main,
+                row = 1,
+                column = 2
+            )
+        },
+        modifier = modifier.fillMaxSize(),
+    ) {
+        Box(
+            modifier = Modifier.gridItem(WorkspaceArea.SideBar).fillMaxSize()
+        ) {
+            WorkspaceSidebar()
+        }
+
+        Box(Modifier.gridItem(WorkspaceArea.Main).fillMaxSize()) {
+            DesktopWorkspaceMain(
+                requestTabsViewModelStoreProvider = requestTabsViewModelStoreProvider,
+                requestTabsSaveableStateHolder = requestTabsSaveableStateHolder,
+            )
+        }
+    }
+}
+
+@Composable
+private fun DesktopWorkspaceMain(
+    requestTabsViewModelStoreProvider: ViewModelStoreProvider,
+    requestTabsSaveableStateHolder: SaveableStateHolder,
 ) {
     val requestsTabsSynchronizer = LocalRequestsTabsSynchronizer.current
 
@@ -49,7 +93,7 @@ internal fun DesktopApiWorkspaceSection(
 
     val selectedKey = requestsTabsSynchronizer.selectedTab
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize()) {
         WorkspaceTabBar(
             openedTabs = requestsTabsSynchronizer.openedTabs,
             selectedTab = selectedKey,
@@ -98,6 +142,7 @@ internal fun DesktopApiWorkspaceSection(
                 onOpenRequest = { requestKey ->
                     requestsTabsSynchronizer.openTab(requestKey)
                 },
+                showSavedRequests = false,
                 modifier = Modifier.weight(1f).fillMaxWidth(),
             )
         }

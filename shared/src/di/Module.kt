@@ -2,6 +2,7 @@ package com.techullurgy.dosthman.shared.di
 
 import com.techullurgy.dosthman.data.di.dataModule
 import com.techullurgy.dosthman.shared.HttpRequestDraftStore
+import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.EmptyWorkspaceViewModel
 import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestTabViewModel
 import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpResponseSectionViewModel
 import com.techullurgy.dosthman.shared.screens.workspace.viewmodels.HttpRequestSectionViewModel
@@ -16,4 +17,5 @@ val appModule = module {
     viewModelOf(::HttpRequestTabViewModel)
     viewModelOf(::HttpRequestSectionViewModel)
     viewModelOf(::HttpResponseSectionViewModel)
+    viewModelOf(::EmptyWorkspaceViewModel)
 }
