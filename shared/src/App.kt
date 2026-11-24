@@ -4,13 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.techullurgy.dosthman.shared.di.appModule
 import com.techullurgy.dosthman.shared.screens.workspace.ApiWorkspaceScreen
+import com.techullurgy.dosthman.shared.theme.DosthManTheme
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -22,24 +22,26 @@ import org.koin.dsl.koinConfiguration
 @Preview
 @DevelopmentEntryPoint
 fun App() {
-    KoinApplication(
-        configuration = koinConfiguration {
-            modules(appModule)
-        }
-    ) {
-        val backStack = rememberNavBackStack(
-            configuration = configuration,
-            ApiWorkspace
-        )
-
-        TestDisplay(
-            backStack = backStack,
-            entryProvider = entryProvider {
-                entry<ApiWorkspace> {
-                    ApiWorkspaceScreen(Modifier.fillMaxSize().background(Color.Black))
-                }
+    DosthManTheme {
+        KoinApplication(
+            configuration = koinConfiguration {
+                modules(appModule)
             }
-        )
+        ) {
+            val backStack = rememberNavBackStack(
+                configuration = configuration,
+                ApiWorkspace
+            )
+
+            TestDisplay(
+                backStack = backStack,
+                entryProvider = entryProvider {
+                    entry<ApiWorkspace> {
+                        ApiWorkspaceScreen(Modifier.fillMaxSize())
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -55,7 +57,6 @@ private fun TestDisplay(
         modifier = modifier,
     )
 }
-
 
 private val configuration = SavedStateConfiguration {
     serializersModule = SerializersModule {

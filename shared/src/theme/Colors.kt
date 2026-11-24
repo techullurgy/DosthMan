@@ -1,6 +1,56 @@
 package com.techullurgy.dosthman.shared.theme
 
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
+
+val DosthManPrimary = Color(0xFFF24C00)
+val DosthManOnPrimary = Color(0xFF1E0700)
+val DosthManPrimaryContainer = Color(0xFF5A1C00)
+val DosthManOnPrimaryContainer = Color(0xFFFFDBCF)
+
+val DosthManSecondary = Color(0xFFE7BEAF)
+val DosthManOnSecondary = Color(0xFF442A20)
+val DosthManSecondaryContainer = Color(0xFF5D3F35)
+val DosthManOnSecondaryContainer = Color(0xFFFFDBCF)
+
+val DosthManBackground = Color(0xFF121110)
+val DosthManOnBackground = Color(0xFFF5F2F0)
+
+val DosthManSurface = Color(0xFF1A1816)
+val DosthManOnSurface = Color(0xFFF5F2F0)
+val DosthManSurfaceVariant = Color(0xFF262320)
+val DosthManOnSurfaceVariant = Color(0xFFD8C2B8)
+
+val DosthManOutline = Color(0xFF9E8D85)
+val DosthManOutlineVariant = Color(0xFF4C4541)
+
+val DosthManError = Color(0xFFFFB4AB)
+val DosthManOnError = Color(0xFF690005)
+val DosthManErrorContainer = Color(0xFF93000A)
+val DosthManOnErrorContainer = Color(0xFFFFDAD6)
+
+val DosthManDarkColorScheme = darkColorScheme(
+    primary = DosthManPrimary,
+    onPrimary = DosthManOnPrimary,
+    primaryContainer = DosthManPrimaryContainer,
+    onPrimaryContainer = DosthManOnPrimaryContainer,
+    secondary = DosthManSecondary,
+    onSecondary = DosthManOnSecondary,
+    secondaryContainer = DosthManSecondaryContainer,
+    onSecondaryContainer = DosthManOnSecondaryContainer,
+    background = DosthManBackground,
+    onBackground = DosthManOnBackground,
+    surface = DosthManSurface,
+    onSurface = DosthManOnSurface,
+    surfaceVariant = DosthManSurfaceVariant,
+    onSurfaceVariant = DosthManOnSurfaceVariant,
+    outline = DosthManOutline,
+    outlineVariant = DosthManOutlineVariant,
+    error = DosthManError,
+    onError = DosthManOnError,
+    errorContainer = DosthManErrorContainer,
+    onErrorContainer = DosthManOnErrorContainer,
+)
 
 enum class ColorToken(val color: Color, val contentColor: Color) {
     Green50(Color(0xFFEAFBF2), Color.Black),
